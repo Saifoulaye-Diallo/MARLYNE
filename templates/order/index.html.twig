@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Valider ma commande{% endblock %}
+
+{% block content %}
+    <h1>Je passe ma commande</h1>
+    <p>Choisissez vos préférences avant de passer votre commande sur MARLYNE</p>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+                    {{ form_start(form,{action:path('order_recap')}) }}
+                        {% set formhtml %}
+                            {{form_row(form.adresses)}}
+                        {% endset %}
+                        {{ formhtml | replace({'[br]' : '<br/>'}) | raw }}
+                        {% set formhtml %}
+                            {{form_row(form.transporteur)}}
+                        {% endset %}
+                        {{ formhtml | replace({'[br]' : '<br/>'}) | raw }}
+                    <div class="mt-2">
+                     {{ form_end(form) }} 
+                    </div>
+    </div>
+    <div class="col-md-6">
+        <div class="text-center">
+            <b>Recap de mes commandes</b><br>
+            <p>Retrouver le recaputulatif de vos produits</p>
+        </div>
+        <div class="order-recap">
+            {% for key,produit in cart %}
+                <div class="row {% if key > 0 %} mt-2 {% endif %}">
+                    <div class="col-2">
+                        <img src="uploads/{{ produit.product.ilustration}}"/ height="50px" class="fuild">
+                    </div>
+                    <div class="col-8 my-auto pl-5">
+                        {{ produit.product.name}}</br>
+                        <small>{{ produit.product.tittle}}</small>
+                    </div>
+                    <div class="col-2 my-auto">
+                        x {{ produit.quantity}}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

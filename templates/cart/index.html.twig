@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon panier{% endblock %}
+
+{% block content %}
+<h1>Mon panier</h1>
+Retrouver ici l'ensemble des produits que vous ajouter à votre panier!!!
+{% if cart|length != 0 %}
+<table class="table mt-3">
+   <thead class="thead-dark">
+    <tr>
+      <th scope="col">Produit</th>
+       <th scope="col"></th>
+      <th scope="col">Prix</th>
+      <th scope="col">Quantite</th>
+      <th scope="col">Total</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% set total = null %}
+   {% for produit in cart %}
+    <tr>
+      <td> 
+      <img src=" uploads/{{ produit.product.ilustration}}"/ height="30px" class="fuild">
+      </td>
+      <td>
+        <b>{{ produit.product.name}}</b></br>
+        <span>{{ produit.product.tittle}}</span>
+      </td>
+      <td>{{ (produit.product.price /100 ) | number_format(2 ,',', '.') }}$</td>
+       <td>
+          <a href="{{path('decrase-to-cart',{'id' : produit.product.id})}}">
+            <img src="{{asset('assets/img/minus.png')}}" height="10px" alt="Reduire la quantite">
+          </a>
+          x {{ produit.quantity}}
+          <a href="{{path('add-to-cart',{'id' : produit.product.id})}}">
+            <img src="{{asset('assets/img/plus.png')}}" height="10px" alt="Reduire la quantite">
+          </a>
+        </td>
+       <td>{{ ((produit.product.price * produit.quantity ) /100 ) | number_format(2 ,',', '.') }}$</td>
+       <td>
+        <a href="{{ path('delete-to-cart', {'id': produit.product.id})}}">
+          <img src="{{asset('assets/img/delete.png')}}" height="20px" alt="Supprimer un produti">
+        </a>
+       </td>
+    </tr>
+     {% set total = total +  produit.product.price * produit.quantity %}
+    {% endfor %}
+  </tbody>
+</table>
+<div class="text-right mb-5">
+  <b>Nombre de produit : </b> {{ cart|length }}<br/>
+  <b>Total de mon panier : </b> {{ (total/100 ) | number_format(2 ,',', '.') }}$ 
+  <a href="{{ path('order')}}" class="btn btn-success btn-block mt-2">valider mon panier</a>
+</div>
+{% else %}
+</br>
+<p class="mt-5"><b>Votre panier est vide !!!</b></p>
+{% endif %}
+{% endblock %}
